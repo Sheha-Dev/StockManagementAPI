@@ -4,6 +4,7 @@ namespace StockManagementAPI.Models.Entities
 {
     public class Branch
     {
+        [Key]
         public Guid BranchId { get; set; }
         [MaxLength(50)]
         public string BranchName { get; set; }

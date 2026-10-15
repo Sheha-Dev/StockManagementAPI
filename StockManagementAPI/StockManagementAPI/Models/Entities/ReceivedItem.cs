@@ -4,6 +4,7 @@ namespace StockManagementAPI.Models.Entities
 {
     public class ReceivedItem
     {
+        [Key]
         public Guid ReceivedItemId { get; set; }
         public Guid RequestId { get; set; }
         public Guid RequestItemId { get; set; }

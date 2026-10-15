@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace StockManagementAPI.Models.Entities
 {
     public class Product
     {
+        [Key]
         public Guid ProductId { get; set; }
         [MaxLength(50)]
         public string ProductName { get; set; }

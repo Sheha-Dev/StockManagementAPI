@@ -4,6 +4,7 @@ namespace StockManagementAPI.Models.Entities
 {
     public class Request
     {
+        [Key]
         public Guid RequestId { get; set; }
         public Guid FromBranchId { get; set; }
         public Guid ToBranchId { get; set; }

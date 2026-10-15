@@ -4,6 +4,7 @@ namespace StockManagementAPI.Models.Entities
 {
     public class RequestStatus
     {
+        [Key]
         public Guid RequestStatusId { get; set; }
         [MaxLength(50)]
         public string RequestStatus { get; set; }
