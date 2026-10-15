@@ -13,6 +13,6 @@ namespace StockManagementAPI.Models.Entities
         public bool IsActive { get; set; }
 
         // Navigation Property 
-        public ICollection<Request> Requests { get; set; } = new List<Request>();
+        public ICollection<StockRequest> Requests { get; set; } = new List<StockRequest>();
     }
 }
