@@ -18,15 +18,18 @@ namespace StockManagementAPI.Controllers
             _branchService = branchService;
         }
 
-        [HttpGet]
-        [Route("Branches")]
-        public IActionResult GetBranches()
+        [HttpGet("Branches")]
+        public async Task<IActionResult> GetBranches()
         {
             _logger.LogInformation("Retrieving list of branches");
 
-            var response = _branchService.GetAllAsync(); 
-            // Logic to retrieve branches from the database
-            return Ok(new { Message = "List of branches", Data = response });
+            var response = await _branchService.GetAllAsync();
+
+            return Ok(new
+            {
+                Message = "List of branches",
+                Data = response
+            });
         }
     }
 }
