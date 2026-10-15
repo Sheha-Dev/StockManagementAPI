@@ -15,9 +15,10 @@ namespace StockManagementAPI.Data
         public DbSet<Branch> Branches { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<RequestStatus> RequestStatuses { get; set; } = null!;
-        public DbSet<Request> Requests { get; set; } = null!;
+        public DbSet<StockRequest> StockRequests { get; set; } = null!;
         public DbSet<RequestItem> RequestItems { get; set; } = null!;
         public DbSet<ReceivedItem> ReceivedItems { get; set; } = null!;
+        public DbSet<BranchStock> BranchStocks { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,8 +114,9 @@ namespace StockManagementAPI.Data
             // =====================================
             // 4. REQUEST
             // =====================================
-            modelBuilder.Entity<Request>(entity =>
+            modelBuilder.Entity<StockRequest>(entity =>
             {
+                entity.ToTable("Requests");
                 entity.HasKey(r => r.RequestId);
 
                 entity.Property(r => r.CreatedBy)
@@ -242,6 +244,53 @@ namespace StockManagementAPI.Data
                     .HasForeignKey(ri => ri.RequestItemId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            // =====================================
+            // 6. RECEIVED ITEM
+            // =====================================
+            modelBuilder.Entity<BranchStock>(entity =>
+            {
+                entity.ToTable("BranchStock");
+                entity.HasKey(brs => brs.BranchStockId);
+
+                entity.Property(brs => brs.ProductQuantity)
+                    .IsRequired();
+
+                entity.ToTable(t =>
+                    t.HasCheckConstraint(
+                        "CK_BranchStock_ProductQuantity",
+                        "[ProductQuantity] >= 0"));
+
+                entity.Property(brs => brs.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(brs => brs.CreatedDate)
+                    .IsRequired();
+
+                entity.Property(brs => brs.UpdatedBy)
+                    .IsRequired(false)
+                    .HasMaxLength(50);
+
+                entity.Property(brs => brs.UpdatedDate)
+                    .IsRequired(false);
+
+                entity.Property(brs => brs.IsActive)
+                    .IsRequired();
+
+                // BranchStock -> Branch
+                entity.HasOne(brs => brs.Branch)
+                    .WithMany(b => b.BranchStocks)
+                    .HasForeignKey(brs => brs.BranchId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // BranchStock -> Product
+                entity.HasOne(brs => brs.Product)
+                    .WithMany(p => p.BranchStocks)
+                    .HasForeignKey(brs => brs.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
+                    
     }
 }
