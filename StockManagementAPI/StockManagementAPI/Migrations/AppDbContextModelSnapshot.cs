@@ -56,6 +56,51 @@ namespace StockManagementAPI.Migrations
                     b.ToTable("Branches");
                 });
 
+            modelBuilder.Entity("StockManagementAPI.Models.Entities.BranchStock", b =>
+                {
+                    b.Property<Guid>("BranchStockId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProductQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BranchStockId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BranchStock", t =>
+                        {
+                            t.HasCheckConstraint("CK_BranchStock_ProductQuantity", "[ProductQuantity] >= 0");
+                        });
+                });
+
             modelBuilder.Entity("StockManagementAPI.Models.Entities.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -258,6 +303,25 @@ namespace StockManagementAPI.Migrations
                     b.ToTable("RequestStatuses");
                 });
 
+            modelBuilder.Entity("StockManagementAPI.Models.Entities.BranchStock", b =>
+                {
+                    b.HasOne("StockManagementAPI.Models.Entities.Branch", "Branch")
+                        .WithMany("BranchStocks")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StockManagementAPI.Models.Entities.Product", "Product")
+                        .WithMany("BranchStocks")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("StockManagementAPI.Models.Entities.ReceivedItem", b =>
                 {
                     b.HasOne("StockManagementAPI.Models.Entities.Request", "Request")
@@ -325,6 +389,8 @@ namespace StockManagementAPI.Migrations
 
             modelBuilder.Entity("StockManagementAPI.Models.Entities.Branch", b =>
                 {
+                    b.Navigation("BranchStocks");
+
                     b.Navigation("RequestFrom");
 
                     b.Navigation("RequestTo");
@@ -332,6 +398,8 @@ namespace StockManagementAPI.Migrations
 
             modelBuilder.Entity("StockManagementAPI.Models.Entities.Product", b =>
                 {
+                    b.Navigation("BranchStocks");
+
                     b.Navigation("RequestItems");
                 });
 
