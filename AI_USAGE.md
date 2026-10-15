@@ -22,9 +22,9 @@ I used AI to generate an initial custom exception-handling implementation to cen
 
 AI-generated code was treated as a starting point. I reviewed and adapted the generated code to fit the application structure and assessment requirements.
 
-**One example where AI was wrong or unhelpful:**
 
-[Describe a real example of AI-generated code that did not work as expected or needed modification. Explain how you identified the issue and what you changed.]
+
+
 
 ## My Own Contributions and Decisions
 
