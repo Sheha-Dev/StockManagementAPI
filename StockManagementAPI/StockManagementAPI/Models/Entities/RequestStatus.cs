@@ -4,16 +4,15 @@ namespace StockManagementAPI.Models.Entities
 {
     public class RequestStatus
     {
-        [Key]
         public Guid RequestStatusId { get; set; }
-        [MaxLength(50)]
-        public string RequestStatus { get; set; }
-        [MaxLength(50)]
+        public string RequestStatusName { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        [MaxLength(50)]
-        public string UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public bool IsActive { get; set; }
+
+        // Navigation Property 
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
     }
 }
