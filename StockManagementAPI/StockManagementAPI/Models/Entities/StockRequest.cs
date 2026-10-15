@@ -2,14 +2,14 @@
 
 namespace StockManagementAPI.Models.Entities
 {
-    public class Request
+    public class StockRequest
     {
 
         public Guid RequestId { get; set; }
         public Guid FromBranchId { get; set; }
         public Guid ToBranchId { get; set; }
         public Guid RequestStatusId { get; set; }
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }

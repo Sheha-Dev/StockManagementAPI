@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using StockManagementAPI.Data;
 using StockManagementAPI.Exceptions;
+using StockManagementAPI.Repositories;
+using StockManagementAPI.Services;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+// Register AutoMapper
+// Register AutoMapper profiles by assembly
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Register repositories and services
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IBranchService,BranchService>();
+
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IProductRepository, ProductRepository>();
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IProductService,ProductService>();
+
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IRequestService,RequestService>();
+
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IRequestStatusRepository, RequestStatusRepository>();
+builder.Services.AddScoped<StockManagementAPI.Interfaces.IRequestStatusService, RequestStatusService>();
 
 var app = builder.Build();
 

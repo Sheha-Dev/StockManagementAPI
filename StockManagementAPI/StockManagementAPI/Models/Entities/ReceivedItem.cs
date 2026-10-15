@@ -17,6 +17,6 @@ namespace StockManagementAPI.Models.Entities
         // Navigation Property 
         public RequestItem RequestItem { get; set; } = null!;
 
-        public Request Request  { get; set; } = null!;
+        public StockRequest Request  { get; set; } = null!;
     }
 }
