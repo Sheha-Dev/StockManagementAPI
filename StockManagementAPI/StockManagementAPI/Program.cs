@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StockManagementAPI.Data;
+using StockManagementAPI.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
