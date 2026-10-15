@@ -39,6 +39,9 @@ namespace StockManagementAPI.Services
             var requestedStatus = statuses?
                 .FirstOrDefault(s => s.RequestStatusName == "Requested");
 
+            var cancelStatus = statuses?
+                .FirstOrDefault(s => s.RequestStatusName == "Cancelled");
+
             var branchName = ((Branch) await _branchRepo.GetByIdAsync(dto.FromBranchId)).BranchName;
             
 
@@ -48,26 +51,28 @@ namespace StockManagementAPI.Services
             }
 
             var requests = await _repo.GetAllAsync(
-                requestStatusId: requestedStatus.RequestStatusId,
-                fromBranchId: dto.FromBranchId
-            );
+                        requestStatusId: requestedStatus.RequestStatusId,
+                        fromBranchId: dto.FromBranchId
+                    ) ?? Enumerable.Empty<StockRequest>();
 
             foreach (var item in dto.RequestItems)
             {
                 var stock = await _branchRepo.GetBranchStockAsync(
                     dto.FromBranchId,
                     item.ProductId
-                );
+                ) ?? new BranchStock();
 
                 int reservedStock = requests
                     .SelectMany(r => r.RequestItems)
-                    .Where(ri => ri.ProductId == item.ProductId)
+                    .Where(ri => ri.ProductId == item.ProductId )
                     .Sum(ri => ri.Quantity);
 
 
                 var productName = ((Product)await _productRepository.GetByIdAsync(item.ProductId)).ProductName;
 
-                int availableQty = stock.ProductQuantity - reservedStock;
+                int branchStockQty = (stock.ProductQuantity != null ? stock.ProductQuantity : 0);
+
+                int availableQty = branchStockQty - reservedStock;
 
                 if (stock == null || availableQty < item.Quantity)
                 {
